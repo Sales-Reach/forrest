@@ -48,7 +48,7 @@ class RefreshTokenRepository implements RepositoryInterface {
         $token = $this->storage->get('refresh_token');
 
         return $this->encryptor->decrypt($token);
-    } 
+    }
 
     private function verifyRefreshTokenExists() {
         if ($this->storage->has('refresh_token')) return;
