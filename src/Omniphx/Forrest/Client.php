@@ -199,13 +199,13 @@ abstract class Client
         } else {
             $this->setFormatter($this->settings['defaults']['format']);
         }
-        
+
         if (isset($this->options['headers'])) {
             $this->parameters['headers'] = array_replace_recursive($this->formatter->setHeaders(), $this->options['headers']);
         } else {
             $this->parameters['headers'] = $this->formatter->setHeaders();
         }
-        
+
         if (isset($this->options['body'])) {
             if ($this->parameters['headers']['Content-Type'] == $this->formatter->getDefaultMIMEType()) {
                 $this->parameters['body'] = $this->formatter->setBody($this->options['body']);
@@ -694,6 +694,26 @@ abstract class Client
         $options = $this->setOptions($arguments);
 
         return $this->request($url, $options);
+    }
+
+    /**
+     * Public accessor for the refresh token
+     *
+     * @return HttpClientInterface
+     */
+    public function getRefreshToken()
+    {
+        return $this->refreshTokenRepo->get();
+    }
+
+    /**
+     * Public setter for the refresh token
+     *
+     * @return HttpClientInterface
+     */
+    public function setRefreshToken($token)
+    {
+        $this->refreshTokenRepo->put($token);
     }
 
     private function appendURL($arguments) {

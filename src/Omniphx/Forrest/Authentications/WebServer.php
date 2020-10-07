@@ -5,6 +5,7 @@ namespace Omniphx\Forrest\Authentications;
 use GuzzleHttp\ClientInterface;
 use Omniphx\Forrest\Client;
 use Omniphx\Forrest\Exceptions\MissingKeyException;
+use Omniphx\Forrest\Exceptions\MissingTokenException;
 use Omniphx\Forrest\Interfaces\EventInterface;
 use Omniphx\Forrest\Interfaces\EncryptorInterface;
 use Omniphx\Forrest\Interfaces\InputInterface;
@@ -117,6 +118,8 @@ class WebServer extends Client implements WebServerInterface
 
         // Encrypt token and store token and in storage.
         $this->tokenRepo->put($token);
+        $this->storeVersion();
+        $this->storeResources();
     }
 
     /**
@@ -146,6 +149,8 @@ class WebServer extends Client implements WebServerInterface
         try {
             return $this->instanceURLRepo->get();
         } catch (MissingKeyException $e) {
+            return $loginURL = $this->credentials['loginURL'];
+        } catch (MissingTokenException $e) {
             return $loginURL = $this->credentials['loginURL'];
         }
     }
